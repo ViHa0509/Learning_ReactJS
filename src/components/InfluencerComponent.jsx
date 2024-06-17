@@ -1,26 +1,44 @@
 
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 
 export default function InfluencerComponent(props){
-    var description = props.data.biography
-    if(props.data.biography==="") {
-        description = props.data.website;
-        if(props.data.website===""){
-            description=props.data.name;
-        }
+    const {setOpenUpdate, setUpdateInfluencer, DeleteInfluencer} = useContext(UserContext);
+    const {data} = props;
+    function handleUpdate(data) {
+        setOpenUpdate(true);
+        setUpdateInfluencer(data);
     }
-    if(!props.data.biography==="") {
-        description = props.data.name;
+    function handleDelete(userId) {
+        DeleteInfluencer(userId);
     }
+    let description = data.biography || data.website || data.name;
     return (
-        <React.Fragment>
-            <img src={props.data.profilePicture} 
-                className="w3-bar-item w3-circle w3-hide-small" alt="shit">
-            </img>
-            <div className="w3-bar-item bio">
-                <b><span className="w3-large">@ {props.data.username}</span><br></br></b>
-                <div className="biography"><span>{description}</span></div>
-            </div>
-        </React.Fragment>
-    )
+        data.username ?(
+            <>
+                <img src={data.profilePicture} 
+                    className="w3-bar-item w3-circle w3-hide-small" alt="shit">
+                </img>
+                <div className="w3-bar-item bio">
+                    <b><span className="w3-large">@ {data.username}</span><br></br></b>
+                    <div className="biography"><span>{description}</span></div>
+                </div>
+                {/* <button className="w3-bar-item w3-right" onClick={() => handleUpdate(data)}>
+                    Edit
+                </button> */}
+                <div className="w3-dropdown-hover">
+                    <button className="w3-button w3-black" type="button" id="dropdownMenuButton">
+                        Action
+                    </button>
+                    <div className="w3-dropdown-content w3-bar-block w3-border">
+                        {/* <a class="w3-bar-item w3-button" href="#">Add</a> */}
+                        <a className="w3-bar-item w3-button" onClick={() => handleUpdate(data)}>Edit</a>
+                        <a className="w3-bar-item w3-button" onClick={() => handleDelete(data.userId)}>Delete</a>
+                    </div>
+                </div>
+            </>
+        ):(
+            <h3 style={{textAlign: "center"}}>No result</h3>
+        )
+    );
 }

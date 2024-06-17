@@ -9,11 +9,27 @@ const UserContextProvider = (props) => {
     const [filterResults, setFilterResults] = useState([]);
     const [open, setOpen] = useState(false);
     const [influencer, setInfluencer] = useState({});
-
+    const [openUpdate, setOpenUpdate] = useState(false);
+    const [updateInfluencer, setUpdateInfluencer] = useState();
+    
     function CreateInfluencer(influencer) {
-        console.log(influencer);
         setInfluencerData([influencer,...influencerData]);
     }
+
+    function DeleteInfluencer(userId){
+        console.log("DELETE USER: ", userId)
+        const index = influencerData.findIndex((item) => 
+            item.userId === userId
+        )
+        if (index !== -1) {
+            const updatedData = [...influencerData];
+            updatedData.splice(index, 1);
+            setInfluencerData(updatedData);
+        }
+    }
+    // function FuncUpdateInfluencer(influencer) {
+    //     console.log(influencer);
+    // }
 
     const value = {
         influencerData,
@@ -24,7 +40,12 @@ const UserContextProvider = (props) => {
         setFilterResults,
         open, setOpen,
         setInfluencer,
-        CreateInfluencer
+        CreateInfluencer,
+        //FuncUpdateInfluencer,
+        openUpdate, setOpenUpdate,
+        updateInfluencer,
+        setUpdateInfluencer,
+        DeleteInfluencer
     };
 
     return (

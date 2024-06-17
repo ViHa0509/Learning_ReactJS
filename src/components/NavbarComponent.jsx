@@ -12,7 +12,6 @@ export default function NavbarComponent(props) {
                 console.log(item)
                 return Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
             });
-            console.log(filteredData)
             setFilterResults(filteredData);
         } else {
             setFilterResults(props.data);
