@@ -27,6 +27,27 @@ const UserContextProvider = (props) => {
             setInfluencerData(updatedData);
         }
     }
+
+    function AllMember() {
+        const headers = {
+            'Content-Type': "application/json",
+            'Authorization': "Token e3e77aee7d1f21ae265a65d0084a6886fd4093ee",
+        }
+        fetch("http://127.0.0.1:8000/member/users/all",{
+            mode: 'cors',
+            method: 'GET',
+            headers: headers,
+            credentials: 'include'
+        }).then(response => {
+            if(!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json()
+        }).then(json => console.log(JSON.stringify(json)));
+            
+    }
+    const Members = AllMember();
+    //console.log(Members)
     // function FuncUpdateInfluencer(influencer) {
     //     console.log(influencer);
     // }
