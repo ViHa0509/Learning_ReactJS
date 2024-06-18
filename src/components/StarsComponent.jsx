@@ -4,21 +4,25 @@ import InfluencerComponent from "./InfluencerComponent";
 
 export default function StarsComponent(props){
     const {searchInput, filterResults} = useContext(UserContext)
-    return (
-        <ul className="w3-ul w3-card-4">
-            {
-            searchInput.length > 1 ? (
-                filterResults.length > 0 ? (filterResults.map((influencer)=> 
-            <li key={`${influencer.userId}-${influencer.name}`} className="w3-bar w3-hover-light-grey">
-                    <InfluencerComponent data={influencer}/>
-                </li>)) : (
-                    <InfluencerComponent data={[]}/>
-                )
-            ):(props.data.map((influencer) =>
-                <li key={`${influencer.userId}-${influencer.name}`} className="w3-bar w3-hover-light-grey">
-                    <InfluencerComponent data={influencer}/>
+    console.log(searchInput)
+    const renderInfluencers = (influencers) => {
+        return influencers.length > 0 ? (
+            influencers.map((influencer) => (
+                <li key={`${influencer?.id}-${influencer?.last_name}`} 
+                style={{margin: '20px 0'}}
+                className="w3-bar w3-card-4">
+                    <InfluencerComponent data={influencer} />
                 </li>
-            ))}
-        </ul>
-    );
+            ))
+        ) : (
+            <li className="w3-bar w3-hover-light-grey">
+                <InfluencerComponent data={[]} />
+            </li>
+        );
+    };
+    if (searchInput && searchInput.length > 1) {
+        return <ul className="w3-ul">{renderInfluencers(filterResults)}</ul>;
+    } else {
+        return <ul className="w3-ul">{renderInfluencers(props.data)}</ul>;
+    }
 }

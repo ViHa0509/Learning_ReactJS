@@ -11,7 +11,7 @@ export default function UpdateInfluencerComp() {
         const userName = formData.get('userName');
         const name = formData.get('name');
         updateInfluencer.username = userName;
-        updateInfluencer.name = name;
+    updateInfluencer.name = name;
         setUpdateInfluencer(updateInfluencer);
         setOpenUpdate(false);
     }
