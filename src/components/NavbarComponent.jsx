@@ -1,16 +1,14 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 
 export default function NavbarComponent(props) {
     const {searchInput, setSearchInput, setFilterResults, setOpen} = useContext(UserContext);
-    const navigate = useNavigate();
     const searchItems = (searchValue) => {
         setSearchInput(searchValue);
         if (searchInput!==''){
-            const filteredData = props.data.filter((item)=>{
-                console.log(item)
-                return Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
+            const filteredData = props.data.filter((user)=>{
+                let searchString = searchInput.toLowerCase()
+                return Object.values(user.username||user.email||user.first_name||user.last_name).join('').toLowerCase().includes(searchString)
             });
             setFilterResults(filteredData);
         } else {

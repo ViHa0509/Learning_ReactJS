@@ -4,16 +4,17 @@ import React, { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 
 export default function InfluencerComponent(props){
-    const {setOpenUpdate, setUpdateInfluencer, DeleteInfluencer} = useContext(UserContext);
+    const {setOpenUpdate, setUserUpdate, DeleteInfluencer} = useContext(UserContext);
     const {data} = props;
     function handleUpdate(data) {
         setOpenUpdate(true);
-        setUpdateInfluencer(data);
+        console.log("Update 123123: ", data)
+        setUserUpdate(data);
     }
     function handleDelete(userId) {
         DeleteInfluencer(userId);
     }
-    let description = data?.biography || data?.website || data?.name;
+    let description = data?.biography || data?.last_name;
     return (
         data?.username ?(
             <div className={
@@ -23,16 +24,13 @@ export default function InfluencerComponent(props){
                     align-items: center;
                 ` 
             }>
-                <img src={data.profilePicture} 
+                <img src={data?.profilePicture} 
                     className="w3-bar-item w3-circle w3-hide-small" alt="shit">
                 </img>
                 <div className="w3-bar-item bio">
                     <b><span className="w3-large">@ {data.username}</span><br></br></b>
                     <div className="biography"><span>{description}</span></div>
                 </div>
-                {/* <button className="w3-bar-item w3-right" onClick={() => handleUpdate(data)}>
-                    Edit
-                </button> */}
                 <div className="w3-dropdown-hover">
                     <button className="w3-button w3-black" style={{width: '150px'}} type="button" id="dropdownMenuButton">
                         Action

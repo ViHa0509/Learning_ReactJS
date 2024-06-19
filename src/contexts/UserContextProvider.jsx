@@ -10,8 +10,8 @@ const UserContextProvider = (props) => {
     const [open, setOpen] = useState(false);
     const [influencer, setInfluencer] = useState({});
     const [openUpdate, setOpenUpdate] = useState(false);
-    const [updateInfluencer, setUpdateInfluencer] = useState();
-
+    const [userUpdate, setUserUpdate] = useState();
+    const [loadUser, setLoadUser] = useState(false);
 
     function CreateInfluencer(influencer) {
         setInfluencerData([influencer,...influencerData]);
@@ -28,8 +28,6 @@ const UserContextProvider = (props) => {
             setInfluencerData(updatedData);
         }
     }
-
-    console.log(influencerData);
     const value = {
         influencerData,
         searchInput,
@@ -41,10 +39,11 @@ const UserContextProvider = (props) => {
         setInfluencer,
         CreateInfluencer,
         openUpdate, setOpenUpdate,
-        updateInfluencer,
-        setUpdateInfluencer,
+        userUpdate,
+        setUserUpdate,
         DeleteInfluencer,
-        setInfluencerData
+        setInfluencerData,
+        loadUser, setLoadUser
     };
 
     return (

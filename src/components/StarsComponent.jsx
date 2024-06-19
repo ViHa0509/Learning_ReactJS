@@ -4,9 +4,8 @@ import InfluencerComponent from "./InfluencerComponent";
 
 export default function StarsComponent(props){
     const {searchInput, filterResults} = useContext(UserContext)
-    console.log(searchInput)
     const renderInfluencers = (influencers) => {
-        return influencers.length > 0 ? (
+        return influencers?.length > 0 ? (
             influencers.map((influencer) => (
                 <li key={`${influencer?.id}-${influencer?.last_name}`} 
                 style={{margin: '20px 0'}}
@@ -20,9 +19,9 @@ export default function StarsComponent(props){
             </li>
         );
     };
-    if (searchInput && searchInput.length > 1) {
+    if (searchInput && searchInput.length > 0) {
         return <ul className="w3-ul">{renderInfluencers(filterResults)}</ul>;
     } else {
-        return <ul className="w3-ul">{renderInfluencers(props.data)}</ul>;
+        return <ul className="w3-ul">{renderInfluencers(props?.data)}</ul>;
     }
 }

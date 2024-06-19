@@ -1,97 +1,95 @@
-import axios from 'axios';
 import { useContext, useEffect, useState } from "react";
 import NavbarComponent from "./components/NavbarComponent";
 import StarsComponent from "./components/StarsComponent";
 import { UserContext } from "./contexts/UserContext";
+import UserServices from "./services/userServices";
 import "./styles.css";
-
 
 let influencersPerPage = 6;
 let arrayForHoldingInfluencers = [];
 
 export default function App() {
-    const { influencerData, loading, setInfluencerData } = useContext(UserContext);
+    const { influencerData, loading, setInfluencerData} = useContext(UserContext);
     const [next, setNext] = useState(6);
-
-    const token = 'e3e77aee7d1f21ae265a65d0084a6886fd4093ee';
-
-    useEffect(() => {
-        async function getAPI() {
-            const users = await axios.get('http://localhost:8000/member/users/all/', {
-                headers: {
-                    'Content-Type': "application/json",
-                    'Accept': 'application/json',
-                    'Authorization': `Token ${token}`,
-                },
-                credentials: 'include',
-
-            });
-            setInfluencerData(users.data)
+    const {fetchUsers, fetchClubUsers} = UserServices();
+    useEffect(()=> {
+        const loadUsers = async () => {
+            try {
+                // const usersData = await fetchUsers();
+                // setInfluencerData(usersData);
+                const clubUsers = await fetchClubUsers(1);
+                setInfluencerData(clubUsers);
+            } catch (error){
+                console.error("Failed to load users:", error);
+            }
         }
-        getAPI();
-       
+        loadUsers()
     }, []);
 
     useEffect(
         () => {
-            if (influencerData?.length > 0) {
-                for (let i = 0; i < influencersPerPage; i++) {
-                    arrayForHoldingInfluencers[i] = influencerData[i];
+            if (influencerData.length > 0){
+                if (influencerData.length >= influencersPerPage) {
+                    for (let i = 0; i < influencersPerPage; i++) {
+                        arrayForHoldingInfluencers[i] = influencerData[i];
+                    }
+                } else {
+                    for (let i = 0; i < influencerData.length; i++) {
+                        arrayForHoldingInfluencers[i] = influencerData[i];
+                    }
                 }
             }
+            
         }
         , [influencerData])
-
-    const getUsers = async () => {
-        const users = await axios.get('http://localhost:8000/member/users/all/', {
-            headers: {
-                'Content-Type': "application/json",
-                'Accept': 'application/json',
-                'Authorization': `Token ${token}`,
-            },
-            credentials: 'include',
-        });
-        return users;
-    }
 
     const showMoreInfluencers = () => {
         if (arrayForHoldingInfluencers.length >= influencerData.length) {
             arrayForHoldingInfluencers = [];
             for (let i = 0; i < influencersPerPage; i++) {
-                arrayForHoldingInfluencers[i] = influencerData[i];
+                if (influencerData[i] !== undefined) {
+                    arrayForHoldingInfluencers[i] = influencerData[i];
+                }
             }
             setNext(influencersPerPage);
         } else {
             let diff = influencerData.length - arrayForHoldingInfluencers.length;
-            if (diff >= 6) {
+            if (diff >= influencersPerPage) {
                 for (let i = next; i < next + influencersPerPage; i++) {
-                    arrayForHoldingInfluencers[i] = influencerData[i];
+                    if (influencerData[i] !== undefined) {
+                        arrayForHoldingInfluencers[i] = influencerData[i];
+                    }
                 }
                 setNext(next + influencersPerPage)
             } else {
                 for (let i = next; i <= next + diff; i++) {
-                    arrayForHoldingInfluencers[i] = influencerData[i];
+                    if (influencerData[i] !== undefined) {
+                        arrayForHoldingInfluencers[i] = influencerData[i];
+                    }
                 }
                 setNext(next + diff);
             }
         }
-        console.log(arrayForHoldingInfluencers)
     }
     return (
         <div className="App">
             {loading && <p id="spinner"><i className="fa fa-spinner w3-spin w3-display-middle" style={{ fontSize: "64px" }}></i></p>}
-            <NavbarComponent data={arrayForHoldingInfluencers} />
+            <NavbarComponent data={influencerData} />
             <div>
                 <StarsComponent data={arrayForHoldingInfluencers} />
             </div>
-            <div className="loadButton">
-                <button className="w3-button w3-white w3-border w3-border-blue">
-                    {(arrayForHoldingInfluencers.length == influencerData.length) ?
-                        <span className="w3-large" onClick={showMoreInfluencers}>Show less</span> :
-                        <span className="w3-large" onClick={showMoreInfluencers}>Show more</span>
-                    }
-                </button>
-            </div>
+            {
+                arrayForHoldingInfluencers.length >= influencersPerPage ? (
+                    <div className="loadButton">
+                        <button className="w3-button w3-white w3-border w3-border-blue">{
+                            arrayForHoldingInfluencers.length == influencerData.length ? 
+                                <span className="w3-large" onClick={showMoreInfluencers}>Show less</span>:
+                                <span className="w3-large" onClick={showMoreInfluencers}>Show more</span>
+                            }
+                        </button>
+                    </div>
+                ): <></>
+            }
         </div>
     )
 }
