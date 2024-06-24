@@ -6,19 +6,23 @@ import UserContextProvider from "./contexts/UserContextProvider.jsx";
 // import './index.css';
 import Home from "./Home.jsx";
 import SignInSide from './components/login.jsx';
+import { isLoggedIn } from './services/auth.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <SignInSide/>
-    <UserContextProvider>
+    {isLoggedIn() ? (
+      <UserContextProvider>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Layout/>}>
+                <Route path="/home" element={<Layout/>}>
                     <Route index element={<Home/>}/>
                     {/* <Route path="createInfluencer" element={<CreateNewInflucencer/>}/> */}
                 </Route>
             </Routes>
         </BrowserRouter>
-    </UserContextProvider>
+      </UserContextProvider>
+    ):(
+      <SignInSide/>
+    )}
   </React.StrictMode>,
 )

@@ -12,7 +12,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-
+import UserServices from '../services/userServices';
+import { redirect } from 'react-router-dom';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -30,14 +31,19 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignUpSide() {
+export default function SignInSide() {
+  const {loginUser} = UserServices();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
+      email: data.get('username'),
       password: data.get('password'),
     });
+    const response = loginUser(data);
+    if(response != null){
+      redirect("/home")
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 import axios from 'axios';
 const UserServices = () => {
-    const token = 'e3e77aee7d1f21ae265a65d0084a6886fd4093ee';
+    const token = localStorage.getItem('mytoken');
 
     const fetchClubUsers = async(club_id) => {
         try{
@@ -51,11 +51,35 @@ const UserServices = () => {
         }
     };
 
+    const loginUser = async(data) => {
+        try {
+            const response = await axios.post('http://localhost:8000/member/login/', data, {
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            });
+            let token = response.data;
+            console.log(token);
+            localStorage.setItem('mytoken', token['token']);
+            return token;
+        } catch (error) {
+            console.error("Login error:", error);
+            throw error;
+        }
+    };
+
+    const logoutUser = () => {
+        console.log("LOG OUT")
+        localStorage.clear();
+        navigator('/login');
+    }
 
     return {
+        loginUser,
         fetchUsers,
         updateUsers,
-        fetchClubUsers
+        fetchClubUsers,
+        logoutUser
     }
 }
 
