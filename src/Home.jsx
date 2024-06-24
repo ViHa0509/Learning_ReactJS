@@ -15,10 +15,10 @@ export default function App() {
     useEffect(()=> {
         const loadUsers = async () => {
             try {
-                // const usersData = await fetchUsers();
-                // setInfluencerData(usersData);
-                const clubUsers = await fetchClubUsers(1);
-                setInfluencerData(clubUsers);
+                const usersData = await fetchUsers();
+                setInfluencerData(usersData);
+                // const clubUsers = await fetchClubUsers(1);
+                // setInfluencerData(clubUsers);
             } catch (error){
                 console.error("Failed to load users:", error);
             }

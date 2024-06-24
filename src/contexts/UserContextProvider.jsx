@@ -12,7 +12,7 @@ const UserContextProvider = (props) => {
     const [openUpdate, setOpenUpdate] = useState(false);
     const [userUpdate, setUserUpdate] = useState();
     const [loadUser, setLoadUser] = useState(false);
-
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     function CreateInfluencer(influencer) {
         setInfluencerData([influencer,...influencerData]);
     }

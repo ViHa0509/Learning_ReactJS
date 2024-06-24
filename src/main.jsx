@@ -5,9 +5,11 @@ import Layout from './Layout.jsx';
 import UserContextProvider from "./contexts/UserContextProvider.jsx";
 // import './index.css';
 import Home from "./Home.jsx";
+import SignInSide from './components/login.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <SignInSide/>
     <UserContextProvider>
         <BrowserRouter>
             <Routes>
