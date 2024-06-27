@@ -12,8 +12,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserServices from '../services/userServices';
-import { redirect } from 'react-router-dom';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -33,6 +33,7 @@ const defaultTheme = createTheme();
 
 export default function SignInSide() {
   const {loginUser} = UserServices();
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,9 +41,19 @@ export default function SignInSide() {
       email: data.get('username'),
       password: data.get('password'),
     });
-    const response = loginUser(data);
+    const loginAction = async () => {
+        try {
+            const token = await loginUser(data);
+            return token
+        } catch (error){
+            console.error("Failed to load users:", error);
+        }
+    }
+    const token = loginAction();
+    console.log("token:", token);
     if(response != null){
-      redirect("/home")
+        console.log('abc')
+        navigate('/home')
     }
   };
 
@@ -120,7 +131,7 @@ export default function SignInSide() {
                         </Link>
                         </Grid>
                         <Grid item>
-                        <Link href="/SignUp" variant="body2">
+                        <Link href="/signup" variant="body2">
                             {"Don't have an account? Sign Up"}
                         </Link>
                         </Grid>

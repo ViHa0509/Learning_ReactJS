@@ -10,7 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-
+import UserServices from '../services/userServices';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -28,116 +28,128 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+export default function SignUpSide() {
+    const {signUpUser} = UserServices();
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        console.log(data);
+        const response = signUpUser(data);
+        if(response){
+            console.log(response)
+        }
+    };
 
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(../assets/picture/background.jpg)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-            <Box
-                sx={{
-                my: 8,
-                mx: 4,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                }}
-            >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign up
-                </Typography>
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="username"
-                        label="Username"
-                        name="username"
-                        autoComplete="username"
-                        autoFocus
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="first_name"
-                        label="first_name"
-                        type="first_name"
-                        id="first_name"
-                        autoComplete="first_name"
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="last_name"
-                        label="last_name"
-                        type="last_name"
-                        id="last_name"
-                        autoComplete="last_name"
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Sign Up
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                        <Link href="#" variant="body2">
-                            Forgot password?
-                        </Link>
+    return (
+        <ThemeProvider theme={defaultTheme}>
+        <Grid container component="main" sx={{ height: '100vh' }}>
+            <CssBaseline />
+            <Grid
+            item
+            xs={false}
+            sm={4}
+            md={7}
+            sx={{
+                backgroundImage: 'url(../assets/picture/background.jpg)',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: (t) =>
+                t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
+            />
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                <Box
+                    sx={{
+                    my: 8,
+                    mx: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign up
+                    </Typography>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="email"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="username"
+                            label="Username"
+                            name="username"
+                            autoComplete="username"
+                            autoFocus
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="first_name"
+                            label="first_name"
+                            type="first_name"
+                            id="first_name"
+                            autoComplete="first_name"
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="last_name"
+                            label="last_name"
+                            type="last_name"
+                            id="last_name"
+                            autoComplete="last_name"
+                        />
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container>
+                            <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Forgot password?
+                            </Link>
+                            </Grid>
+                            <Grid item>
+                            <Link href="/login" variant="body2">
+                                {"Have an account? Sign In"}
+                            </Link>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                        <Link href="/login" variant="body2">
-                            {"Have an account? Sign In"}
-                        </Link>
-                        </Grid>
-                    </Grid>
-                    <Copyright sx={{ mt: 5 }} />
+                        <Copyright sx={{ mt: 5 }} />
+                    </Box>
                 </Box>
-            </Box>
+            </Grid>
         </Grid>
-      </Grid>
-    </ThemeProvider>
-  );
+        </ThemeProvider>
+    );
 }

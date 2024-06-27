@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const UserServices = () => {
     const token = localStorage.getItem('mytoken');
-
+    const navigate = useNavigate();
     const fetchClubUsers = async(club_id) => {
         try{
             const response = await axios.get(`http://localhost:8000/club/manage-club/${club_id}/all-member?user-detail=true`, {
@@ -68,10 +69,24 @@ const UserServices = () => {
         }
     };
 
+    const signUpUser = async(data) => {
+        try {
+            const response = await axios.post('http://localhost:8000/member/register/', data, {
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Signup error:", error);
+            throw error;
+        }
+    };
+
     const logoutUser = () => {
         console.log("LOG OUT")
         localStorage.clear();
-        navigator('/login');
+        return navigate("/login")
     }
 
     return {
@@ -79,7 +94,8 @@ const UserServices = () => {
         fetchUsers,
         updateUsers,
         fetchClubUsers,
-        logoutUser
+        logoutUser,
+        signUpUser
     }
 }
 
