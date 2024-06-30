@@ -1,15 +1,26 @@
 import axios from 'axios';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 const UserServices = () => {
-    const token = localStorage.getItem('mytoken');
+    const {token, setToken} = useContext(UserContext);
     const navigate = useNavigate();
+    const {setIsLoggedIn} = useContext(UserContext);
+
+    const getToken = async() => {
+        if(token == '' && localStorage.getItem('mytoken') != null) {
+            await setToken(localStorage.getItem('mytoken'));
+        }
+    }
+
     const fetchClubUsers = async(club_id) => {
+        getToken();
         try{
             const response = await axios.get(`http://localhost:8000/club/manage-club/${club_id}/all-member?user-detail=true`, {
                 headers: {
                     'Content-Type': "application/json",
                     'Accept': 'application/json',
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Token ${token['token']}`,
                 },
                 credentials: 'include',
             });
@@ -20,13 +31,15 @@ const UserServices = () => {
         }
     };
 
+    
     const fetchUsers = async() => {
+        getToken();
         try{
             const response = await axios.get('http://localhost:8000/member/users/all/', {
                 headers: {
                     'Content-Type': "application/json",
                     'Accept': 'application/json',
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Token ${token['token']}`,
                 },
                 credentials: 'include',
             });
@@ -38,6 +51,7 @@ const UserServices = () => {
     };
 
     const updateUsers = async(data) => {
+        getToken();
         try{
             const response = await axios.put(`http://localhost:8000/member/users/${data.id}/`, data, {
                 headers: {
@@ -85,8 +99,9 @@ const UserServices = () => {
 
     const logoutUser = () => {
         console.log("LOG OUT")
-        localStorage.clear();
-        return navigate("/login")
+        localStorage.removeItem("mytoken");
+        setIsLoggedIn(false);
+        return navigate("/login");
     }
 
     return {

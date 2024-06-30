@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserServices from '../services/userServices';
+import { UserContext } from '../contexts/UserContext';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -31,30 +32,26 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
+const SignInSide = () => {
   const {loginUser} = UserServices();
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
+  const {setIsLoggedIn, setToken} = React.useContext(UserContext);
+  const handleSubmit = async(event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('username'),
       password: data.get('password'),
     });
-    const loginAction = async () => {
-        try {
-            const token = await loginUser(data);
-            return token
-        } catch (error){
-            console.error("Failed to load users:", error);
-        }
-    }
-    const token = loginAction();
-    console.log("token:", token);
-    if(response != null){
-        console.log('abc')
-        navigate('/home')
-    }
+    try {
+      const response = await loginUser(data);
+      if(response){
+        setToken(response);
+        setIsLoggedIn(true);
+        navigate("/home");
+      }}catch (error) {
+        console.error("Failed to log in:", error);
+      }
   };
 
   return (
@@ -144,3 +141,5 @@ export default function SignInSide() {
     </ThemeProvider>
   );
 }
+
+export default SignInSide;
