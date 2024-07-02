@@ -1,11 +1,13 @@
+import { useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 
-export const isLoggedIn = () => {
+export const checkLogIn = () => {
+    const {setIsLoggedIn} = useContext(UserContext);
     console.log("CHECK LOGGED IN");
-    let token = localStorage.getItem('mytoken');
-    let isLogin = false;
-    if(token !== null){
-        isLogin = true;
+    const mytoken = localStorage.getItem('mytoken');
+    if(mytoken !== null) {
+        setIsLoggedIn(true);
+        return true;
     }
-    console.log("logged in:", isLogin)
-    return isLogin;
+    return false;
 };

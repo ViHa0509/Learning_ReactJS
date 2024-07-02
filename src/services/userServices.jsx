@@ -1,20 +1,24 @@
 import axios from 'axios';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 const UserServices = () => {
-    const {token, setToken} = useContext(UserContext);
+    const {token, setToken, setAuthUser} = useContext(UserContext);
     const navigate = useNavigate();
     const {setIsLoggedIn} = useContext(UserContext);
 
-    const getToken = async() => {
-        if(token == '' && localStorage.getItem('mytoken') != null) {
-            await setToken(localStorage.getItem('mytoken'));
+    useEffect(() => {
+        if(token == '') {
+            let mydata = JSON.parse(localStorage.getItem('mydata'));
+            if(mydata!== null){
+                setToken(mydata['token']);
+                setAuthUser(mydata)
+            }
         }
-    }
+    }, [setToken]);
+
 
     const fetchClubUsers = async(club_id) => {
-        getToken();
         try{
             const response = await axios.get(`http://localhost:8000/club/manage-club/${club_id}/all-member?user-detail=true`, {
                 headers: {
@@ -26,32 +30,28 @@ const UserServices = () => {
             });
             return response.data;
         } catch (error) {
-            console.error("Error fetching users:", error);
-            throw error;
+            return '';
         }
     };
-
     
     const fetchUsers = async() => {
-        getToken();
         try{
+            console.log("token", token)
             const response = await axios.get('http://localhost:8000/member/users/all/', {
                 headers: {
                     'Content-Type': "application/json",
                     'Accept': 'application/json',
-                    'Authorization': `Token ${token['token']}`,
+                    'Authorization': `Token ${token}`,
                 },
                 credentials: 'include',
             });
             return response.data;
         } catch (error) {
-            console.error("Error fetching users:", error);
-            throw error;
+            return '';
         }
     };
 
     const updateUsers = async(data) => {
-        getToken();
         try{
             const response = await axios.put(`http://localhost:8000/member/users/${data.id}/`, data, {
                 headers: {
@@ -61,8 +61,7 @@ const UserServices = () => {
             });
             return response.data;
         } catch (error) {
-            console.error("Error update users:", error);
-            throw error;
+            return '';
         }
     };
 
@@ -73,13 +72,14 @@ const UserServices = () => {
                     'Content-Type': "application/json"
                 }
             });
-            let token = response.data;
-            console.log(token);
-            localStorage.setItem('mytoken', token['token']);
-            return token;
+            let data_response = response.data;
+            console.log("data response :", data_response)
+            if (data_response) {
+                localStorage.setItem('mydata', JSON.stringify(data_response));
+            }
+            return data_response;
         } catch (error) {
-            console.error("Login error:", error);
-            throw error;
+            return '';
         }
     };
 
@@ -90,16 +90,17 @@ const UserServices = () => {
                     'Content-Type': "application/json"
                 }
             });
-            return response.data;
+            let response_data = response.data;
+
+            console.log("data result: ", response_data)
+            return response_data;
         } catch (error) {
-            console.error("Signup error:", error);
-            throw error;
+            return '';
         }
     };
 
     const logoutUser = () => {
-        console.log("LOG OUT")
-        localStorage.removeItem("mytoken");
+        localStorage.removeItem("mydata");
         setIsLoggedIn(false);
         return navigate("/login");
     }

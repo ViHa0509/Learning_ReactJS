@@ -9,10 +9,11 @@ let influencersPerPage = 6;
 let arrayForHoldingInfluencers = [];
 
 export default function App() {
-    const { influencerData, loading, setInfluencerData} = useContext(UserContext);
+    const { influencerData, loading, setInfluencerData, token} = useContext(UserContext);
     const [next, setNext] = useState(6);
     const {fetchUsers, fetchClubUsers} = UserServices();
     useEffect(()=> {
+        //console.log("token: ", token)
         const loadUsers = async () => {
             try {
                 const usersData = await fetchUsers();
@@ -24,7 +25,7 @@ export default function App() {
             }
         }
         loadUsers()
-    }, []);
+    }, [token]);
 
     useEffect(
         () => {

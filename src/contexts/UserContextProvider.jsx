@@ -14,6 +14,8 @@ const UserContextProvider = (props) => {
     const [loadUser, setLoadUser] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState('');
+    const [authUser, setAuthUser] = useState();
+    const [openUserDetail, setOpenUserDetail] = useState(false)
     function CreateInfluencer(influencer) {
         setInfluencerData([influencer,...influencerData]);
     }
@@ -46,7 +48,9 @@ const UserContextProvider = (props) => {
         setInfluencerData,
         loadUser, setLoadUser,
         isLoggedIn, setIsLoggedIn,
-        token, setToken
+        token, setToken,
+        authUser, setAuthUser,
+        openUserDetail, setOpenUserDetail
     };
 
     return (

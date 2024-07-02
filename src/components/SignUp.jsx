@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserServices from '../services/userServices';
 function Copyright(props) {
   return (
@@ -30,13 +31,14 @@ const defaultTheme = createTheme();
 
 export default function SignUpSide() {
     const {signUpUser} = UserServices();
-    const handleSubmit = (event) => {
+    const navigate = useNavigate();
+    const handleSubmit = async(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log(data);
-        const response = signUpUser(data);
+        const response = await signUpUser(data);
         if(response){
             console.log(response)
+            navigate("/login");
         }
     };
 
@@ -93,7 +95,6 @@ export default function SignUpSide() {
                             label="Username"
                             name="username"
                             autoComplete="username"
-                            autoFocus
                         />
                         <TextField
                             margin="normal"
