@@ -1,16 +1,16 @@
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import { styled } from '@mui/material';
+import { ClickAwayListener, styled } from '@mui/material';
 import * as React from 'react';
 import { UserContext } from '../contexts/UserContext';
 import UserServices from '../services/userServices';
 
-const UserDetailPopUp = ({ open, anchor }) => {
+const UserDetailPopUp = ({ open, anchor, onClose }) => {
     const id = open ? 'simple-popup' : undefined;
     const { logoutUser } = UserServices();
     const { authUser } = React.useContext(UserContext);
     return (
-        <div>
-            <BasePopup id={id} open={open} anchor={anchor}>
+        <BasePopup id={id} open={open} anchor={anchor}>
+            <ClickAwayListener onClickAway={onClose}>
                 <PopupBody>
                     <Header>
                         <ProfileImage src='/assets/picture/bluemaex.jpg' alt="User" />
@@ -23,8 +23,8 @@ const UserDetailPopUp = ({ open, anchor }) => {
                         Logout
                     </LogoutButton>
                 </PopupBody>
-            </BasePopup>
-        </div>
+            </ClickAwayListener>
+        </BasePopup>
     );
 };
 

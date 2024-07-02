@@ -13,9 +13,7 @@ const AppRouter = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
 
     useEffect(() => {
-        console.log("Check login!!!")
         const mydata = localStorage.getItem('mydata');
-        console.log(mydata)
         if (mydata !== null) {
             setIsLoggedIn(true);
         }

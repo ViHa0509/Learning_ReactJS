@@ -1,10 +1,8 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
-import UserServices from "../services/userServices";
 import UserDetailPopUp from "./UserDetailNavBar";
 export default function NavbarComponent(props) {
     const {searchInput, setSearchInput, setFilterResults, setOpen, authUser, setOpenUserDetail} = useContext(UserContext);
-    const {logoutUser} = UserServices();
     const [anchor, setAnchor] = useState(null);
     const searchItems = (searchValue) => {
         setSearchInput(searchValue);
@@ -18,23 +16,27 @@ export default function NavbarComponent(props) {
             setFilterResults(props.data);
         }
     }
-
-    function handleClickOpen() {
-        setOpen(true)
+    
+    function closePop() {
+        setOpenUserDetail(false);
+        setAnchor(null);
     }
+    
     const handleUserDetailClick = (event) => {
         setAnchor(anchor ? null : event.currentTarget);
         setOpenUserDetail(true);
     }
 
     return (
-        <div className="w3-padding w3-large w3-top w3-blue">
-            <div className="w3-quarter">
-                <div className="w3-bar">
-                <span className="w3-bar-item">
-                    <span className="w3-text-black">{0}</span> Following</span>
-                </div>
-            </div>
+        <div style={
+           {
+           display: 'flex',
+           justifyContent: "center",
+           alignItems: 'center'
+
+           }
+        } className="w3-padding w3-large w3-top w3-blue">
+            <div className="w3-quarter"></div>
             <div className="w3-half">
                 <input type="text" className=" w3-border-0 w3-padding w3-round" style={{width:"100%"}}
                     onChange={(e) => searchItems(e.target.value)}
@@ -50,15 +52,9 @@ export default function NavbarComponent(props) {
                     >
                         <span className="w3-large">{authUser.username}</span>
                     </button>
-                    {/* <button className="w3-bar-item w3-margin-left w3-button w3-right w3-circle w3-white" 
-                        style={{height:"40px"}} 
-                        onClick={handleClickOpen}
-                    >
-                        <span className="w3-large">Add</span>
-                    </button> */}
                 </div>
             </div>
-            <UserDetailPopUp open={Boolean(anchor)} anchor={anchor}/>
+            <UserDetailPopUp open={Boolean(anchor)} anchor={anchor} onClose={closePop}/>
         </div>
     );
 };

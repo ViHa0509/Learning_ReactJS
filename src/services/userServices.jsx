@@ -36,7 +36,6 @@ const UserServices = () => {
     
     const fetchUsers = async() => {
         try{
-            console.log("token", token)
             const response = await axios.get('http://localhost:8000/member/users/all/', {
                 headers: {
                     'Content-Type': "application/json",
@@ -73,7 +72,6 @@ const UserServices = () => {
                 }
             });
             let data_response = response.data;
-            console.log("data response :", data_response)
             if (data_response) {
                 localStorage.setItem('mydata', JSON.stringify(data_response));
             }

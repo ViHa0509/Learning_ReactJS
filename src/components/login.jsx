@@ -46,7 +46,6 @@ const SignInSide = () => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const response = await loginUser(data);
-        console.log("login data:", response)
         if (response) {
             setToken(response['token']);
             setIsLoggedIn(true);
